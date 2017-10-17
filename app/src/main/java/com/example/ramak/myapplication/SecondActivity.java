@@ -12,6 +12,7 @@ public class SecondActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.succ_login);
+	// FInally on Home Page
 
     }
 }
