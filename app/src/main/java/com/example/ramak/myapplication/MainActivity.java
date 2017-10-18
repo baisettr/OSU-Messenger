@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +56,7 @@ public class MainActivity extends Activity {
         submit_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 valUser();
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, SecondActivity.class);
-                startActivity(intent);
+
             }
         });
 
@@ -129,13 +128,24 @@ public class MainActivity extends Activity {
             progressBar.setVisibility(GONE);
             try {
                 JSONObject object = new JSONObject(s);
-                if (!object.getBoolean("error")) {
+                Log.d("here1",object.toString());
+                /*if (!object.getBoolean("error")) {
                     Toast.makeText(getApplicationContext(), object.getString("message"), Toast.LENGTH_SHORT).show();
+
+
                     //refreshing the herolist after every operation
                     //so we get an updated list
                     //we will create this method right now it is commented
                     //because we haven't created it yet
                     //refreshHeroList(object.getJSONArray("heroes"));
+                }*/
+
+                if (object.names().get(0).equals("success")){
+                    Toast.makeText(getApplicationContext(),"SUCCESS"+object.getString("success"), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(),SecondActivity.class));
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"ERROR"+object.getString("error"),Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
