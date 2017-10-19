@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS `osuser`;
+CREATE TABLE `osuser` (
+  `ID` bigint(20) NOT NULL,
+  `DOB` varchar(255) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
+  `EMAIL` varchar(255) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
+  `YEAR` bigint(20) DEFAULT NULL,
+  `NAME` varchar(255) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
+  `MAJOR` varchar(255) CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,
+  `PWD` varchar(255) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `PHONE` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
