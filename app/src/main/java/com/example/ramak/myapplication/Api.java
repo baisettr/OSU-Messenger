@@ -6,7 +6,8 @@ package com.example.ramak.myapplication;
 
 public class Api {
 
-    private static final String ROOT_URL = "http://10.0.0.226:3000/osu/";
+    // private static final String ROOT_URL = "http://10.0.0.226:3000/osu/";
+    private static final String ROOT_URL = "http://10.249.88.58:3000/osu/";
 
     public static final String URL_REGISTER_USER = ROOT_URL + "regUser";
     public static final String URL_VALIDATE_USER = ROOT_URL + "valUser";

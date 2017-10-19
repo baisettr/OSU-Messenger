@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
             }
         });
     }
-    private void valUser() {
+    public void valUser() {
         String userId = editTextUserId.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         //validating the inputs
