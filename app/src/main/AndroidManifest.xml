@@ -3,6 +3,7 @@
     package="com.example.ramak.myapplication">
     <!-- this is the internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -23,9 +24,15 @@
         <activity android:name="SecondActivity"
             android:label="secondActivity"
             />
+        <activity android:name=".HomeActivity"
+            android:label="homeActivity"
+            />
         <activity android:name="RegisterActivity"
             android:label="registerActivity"
             />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD_OyIu6tYS1liu-ouQdUnhlYgRJ3xbiT8" />
     </application>
 
 </manifest>

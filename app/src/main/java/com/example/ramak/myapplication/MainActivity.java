@@ -142,7 +142,7 @@ public class MainActivity extends Activity {
 
                 if (object.names().get(0).equals("success")){
                     Toast.makeText(getApplicationContext(),"SUCCESS"+object.getString("success"), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),SecondActivity.class));
+                    startActivity(new Intent(getApplicationContext(),HomeActivity.class));
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"ERROR"+object.getString("error"),Toast.LENGTH_SHORT).show();

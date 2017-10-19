@@ -66,9 +66,6 @@ public class RegisterActivity extends Activity {
         submit_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 regUser();
-                Intent intent = new Intent();
-                intent.setClass(RegisterActivity.this, SecondActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -140,13 +137,12 @@ public class RegisterActivity extends Activity {
             progressBar.setVisibility(GONE);
             try {
                 JSONObject object = new JSONObject(s);
-                if (!object.getBoolean("error")) {
-                    Toast.makeText(getApplicationContext(), object.getString("message"), Toast.LENGTH_SHORT).show();
-                    //refreshing the herolist after every operation
-                    //so we get an updated list
-                    //we will create this method right now it is commented
-                    //because we haven't created it yet
-                    //refreshHeroList(object.getJSONArray("heroes"));
+                if (object.names().get(0).equals("success")){
+                    Toast.makeText(getApplicationContext(),"SUCCESS "+object.getString("success"), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"ERROR "+object.getString("error"),Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
