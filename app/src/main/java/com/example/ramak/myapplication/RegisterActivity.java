@@ -30,7 +30,9 @@ public class RegisterActivity extends Activity {
     private EditText editTextPassword;
     private EditText editTextPasswordVer;
     private EditText editTextEmail;
-    private EditText editTextName;
+    private EditText editTextFirstName;
+    private EditText editTextLastName;
+    private EditText editTextSkills;
     private EditText editTextPhone;
     private EditText editTextMajor;
     private EditText editTextYear;
@@ -46,7 +48,9 @@ public class RegisterActivity extends Activity {
         editTextPassword = (EditText)findViewById(R.id.editTextPassword);
         editTextPasswordVer = (EditText)findViewById(R.id.editTextPasswordVer);
         editTextEmail = (EditText)findViewById(R.id.editTextEmail);
-        editTextName = (EditText)findViewById(R.id.editTextName);
+        editTextFirstName = (EditText)findViewById(R.id.editTextFirstName);
+        editTextLastName = (EditText)findViewById(R.id.editTextLastName);
+        editTextSkills = (EditText)findViewById(R.id.editTextSkills);
         editTextPhone =(EditText)findViewById(R.id.editTextPhone);
         editTextMajor = (EditText)findViewById(R.id.editTextMajor);
         editTextYear = (EditText)findViewById(R.id.editTextYear);
@@ -73,7 +77,15 @@ public class RegisterActivity extends Activity {
     private void regUser() {
         String userId = editTextUserId.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-        String name = editTextName.getText().toString().trim();
+        String passwordVer = editTextPasswordVer.getText().toString().trim();
+        String email = editTextEmail.getText().toString().trim();
+        String firstName = editTextFirstName.getText().toString().trim();
+        String lastName = editTextLastName.getText().toString().trim();
+        String phone = editTextPhone.getText().toString().trim();
+        String major = editTextMajor.getText().toString().trim();
+        String year = editTextYear.getText().toString().trim();
+        String skills = editTextSkills.getText().toString().trim();
+
         //validating the inputs
         if (TextUtils.isEmpty(userId)) {
             editTextUserId.setError("Please enter userId");
@@ -87,17 +99,43 @@ public class RegisterActivity extends Activity {
             return;
         }
 
-        /*if (editTextPassword != editTextPasswordVer) {
+
+        if (password.equals(passwordVer)){}
+        else{
             editTextPasswordVer.setError("Please Confirm again");
             editTextPasswordVer.requestFocus();
             return;
-        }*/
+        }
+
+        if (TextUtils.isEmpty(email)) {
+            editTextEmail.setError("Please enter email");
+            editTextEmail.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(firstName)) {
+            editTextFirstName.setError("Please enter first name");
+            editTextFirstName.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(lastName)) {
+            editTextLastName.setError("Please enter last name");
+            editTextLastName.requestFocus();
+            return;
+        }
         //if validation passes
 
         HashMap<String, String> params = new HashMap<>();
         params.put("userId", userId);
-        params.put("password", password);
-        params.put("name", name);
+        params.put("userPassword", password);
+        params.put("userFirstName", firstName);
+        params.put("userLastName", lastName);
+        params.put("userEmail", email);
+        params.put("userSkills", skills);
+        params.put("userMajor", major);
+        params.put("userPhone", phone);
+        params.put("studyYear", year);
 
         //Calling the create hero API
         RegisterActivity.PerformNetworkRequest request = new RegisterActivity.PerformNetworkRequest(Api.URL_REGISTER_USER, params, CODE_POST_REQUEST);

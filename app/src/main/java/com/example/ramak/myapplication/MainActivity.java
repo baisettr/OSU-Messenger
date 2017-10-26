@@ -69,6 +69,11 @@ public class MainActivity extends Activity {
         });
     }
     public void valUser() {
+
+        String username = getUserNmae();
+        if (username.isEmpty()){
+            showError("hello");
+        }
         String userId = editTextUserId.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         //validating the inputs
@@ -92,6 +97,15 @@ public class MainActivity extends Activity {
         //Calling the create hero API
         PerformNetworkRequest request = new PerformNetworkRequest(Api.URL_VALIDATE_USER, params, CODE_POST_REQUEST);
         request.execute();
+    }
+
+    public String getUserNmae() {
+    return "hello";
+    }
+
+
+    public void showError(String s) {
+        editTextUserId.setError(s);
     }
 
     //inner class to perform network request extending an AsyncTask
@@ -141,7 +155,8 @@ public class MainActivity extends Activity {
                 }*/
 
                 if (object.names().get(0).equals("success")){
-                    Toast.makeText(getApplicationContext(),"SUCCESS"+object.getString("success"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
+                    Log.d("output",object.getString("success"));
                     startActivity(new Intent(getApplicationContext(),HomeActivity.class));
                 }
                 else{
