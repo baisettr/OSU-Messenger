@@ -5,4 +5,9 @@
     <string name="register">register</string>
     <string name="register_button">Submit</string>
     <string name="cancel_button">Cancel</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_button">ButtonActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

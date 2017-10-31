@@ -1,24 +1,14 @@
 package com.example.ramak.myapplication;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RatingBar;
-import android.widget.Spinner;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,88 +16,80 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static android.view.View.GONE;
 
+public class HomeActivity1 extends AppCompatActivity {
+    private Button log_out;
+    private Button scan;
+    private String json;
+    private TextView userId;
 
-public class MainActivity extends Activity {
-
-    private Button submit_button;//login button
-    private Button register_button;//register button
-    private EditText editTextUserId;
-    private EditText editTextPassword;
-    private ProgressBar progressBar;
     private static final int CODE_GET_REQUEST = 1024;
     private static final int CODE_POST_REQUEST = 1025;
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.hello);
+        setContentView(R.layout.activity_home1);
 
-        submit_button = (Button)findViewById(R.id.submit_button);
-        register_button = (Button)findViewById(R.id.register_button);
-        editTextUserId = (EditText)findViewById(R.id.editTextUserId);
-        editTextPassword = (EditText)findViewById(R.id.editTextPassword);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        Bundle param=getIntent().getExtras();
+        final String user=(String) param.get("user");
 
-        submit_button.setOnClickListener(new View.OnClickListener() {
+        try {
+
+            //funcions per a cridar el string amb JSON i convertir-lo de nou a JSON
+            JSONArray jsas = new JSONArray(user);
+            for (int i =0; i < jsas.length(); i++)
+            {
+                JSONObject message = jsas.getJSONObject(i);
+                if (message.getString("title").equals("userId")){
+                    json = message.getString("value");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        log_out = (Button)findViewById(R.id.logout);
+        scan = (Button)findViewById(R.id.scan);
+        userId = (TextView) findViewById(R.id.welcome);
+        userId.setText("Welcome "+json);
+        log_out.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                valUser();
-
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
             }
         });
-
-        register_button.setOnClickListener(new View.OnClickListener() {
+        scan.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                listLocations();
+                //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class).putExtra("user",user));
             }
         });
     }
-    public void valUser() {
-
-        String username = getUserNmae();
-        if (username.isEmpty()){
-            showError("hello");
-        }
-        String userId = editTextUserId.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
-        //validating the inputs
-        if (TextUtils.isEmpty(userId)) {
-            editTextUserId.setError("Please enter name");
-            editTextUserId.requestFocus();
-            return;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            editTextPassword.setError("Please enter real name");
-            editTextPassword.requestFocus();
-            return;
-        }
-        //if validation passes
+    public void listLocations() {
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("userId", userId);
-        params.put("password", password);
-
+        params.put("userId", json);
         //Calling the create hero API
-        PerformNetworkRequest request = new PerformNetworkRequest(Api.URL_VALIDATE_USER, params, CODE_POST_REQUEST);
+        HomeActivity1.PerformNetworkRequest request = new HomeActivity1.PerformNetworkRequest(Api.URL_LISTLOCATIONS_USER, params, CODE_POST_REQUEST);
         request.execute();
     }
 
-    public String getUserNmae() {
-    return "hello";
+    public void updateUserLocation(String latitude,String longitude) {
+
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("userId", json);
+        params.put("latitude", latitude);
+        params.put("longitude", longitude);
+
+        params.put("userActive", "1");
+        params.put("userStatus", "violet");
+        //Calling the create hero API
+        HomeActivity1.PerformNetworkRequest request = new HomeActivity1.PerformNetworkRequest(Api.URL_INSERTUSERLOCATION_USER, params, CODE_POST_REQUEST);
+        request.execute();
     }
-
-
-    public void showError(String s) {
-        editTextUserId.setError(s);
-    }
-
     //inner class to perform network request extending an AsyncTask
     private class PerformNetworkRequest extends AsyncTask<Void, Void, String> {
 
@@ -131,7 +113,7 @@ public class MainActivity extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressBar.setVisibility(View.VISIBLE);
+            //progressBar.setVisibility(View.VISIBLE);
         }
 
 
@@ -139,7 +121,7 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            progressBar.setVisibility(GONE);
+            //progressBar.setVisibility(GONE);
             try {
                 JSONObject object = new JSONObject(s);
                 Log.d("here1",object.toString());
@@ -157,7 +139,7 @@ public class MainActivity extends Activity {
                 if (object.names().get(0).equals("success")){
                     Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
                     Log.d("output",object.getString("success"));
-                    startActivity(new Intent(getApplicationContext(),HomeActivity1.class).putExtra("user",object.getString("success")));
+                    startActivity(new Intent(getApplicationContext(),MapLocationActivity.class).putExtra("user",json).putExtra("locations",object.getString("success")));
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"ERROR"+object.getString("error"),Toast.LENGTH_SHORT).show();
@@ -183,3 +165,4 @@ public class MainActivity extends Activity {
         }
     }
 }
+

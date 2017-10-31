@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ramak.myapplication">
+
     <!-- this is the internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -18,21 +19,34 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="SecondActivity"
-            android:label="secondActivity"
-            />
-        <activity android:name=".HomeActivity"
-            android:label="homeActivity"
-            />
-        <activity android:name="RegisterActivity"
-            android:label="registerActivity"
-            />
+        <activity
+            android:name=".SecondActivity"
+            android:label="secondActivity" />
+        <activity
+            android:name=".HomeActivity"
+            android:label="homeActivity" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="registerActivity" />
+        <activity
+            android:name=".MapLocationActivity"
+            android:label="mapActivity" />
+        <activity
+            android:name=".ProfileViewActivity"
+            android:label="viewActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD_OyIu6tYS1liu-ouQdUnhlYgRJ3xbiT8" />
+
+        <activity
+            android:name=".ButtonActivity"
+            android:label="@string/title_activity_button" />
+        <activity android:name=".HomeActivity1"></activity>
     </application>
 
 </manifest>

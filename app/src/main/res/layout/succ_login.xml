@@ -9,11 +9,11 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="278dp"
-        android:layout_height="66dp"
+        android:layout_width="309dp"
+        android:layout_height="540dp"
         android:text="Welcome Foe"
         android:textSize="40dp"
-        android:layout_weight="0.54" />
+        android:layout_weight="0.70" />
 
 
     <ImageButton

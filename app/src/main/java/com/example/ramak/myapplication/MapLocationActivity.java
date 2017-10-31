@@ -1,36 +1,8 @@
 package com.example.ramak.myapplication;
 
 import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TabHost;
-
-import com.example.ramak.myapplication.R;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -39,7 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.util.Log;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -56,80 +28,49 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import static android.R.id.list;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
-
-/**
- * Created by ramak on 10/19/2017.
- */
-
-public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,
+public class MapLocationActivity extends AppCompatActivity
+        implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    private TabHost tabHost;
-
-    //private GoogleMap mMap;
-    private Button log_out;
     GoogleMap mGoogleMap;
     SupportMapFragment mapFrag;
     LocationRequest mLocationRequest;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
-
-    private static final LatLng PERTH = new LatLng(-31.952854, 115.857342);
-    private static final LatLng SYDNEY = new LatLng(-33.87365, 151.20689);
-    private static final LatLng BRISBANE = new LatLng(-27.47093, 153.0235);
-
-    private Marker mPerth;
-    private Marker mSydney;
-    private Marker mBrisbane;
-
-
-    protected void onCreate(Bundle savedInstanceState) {
-
+    private String user;
+    private String locations;
+    private String userId;
+    private String latitude;
+    private String longitude;
+    private String status;
+    private Integer active;
+    //private BitmapDescriptorFactory colour;
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.homepage);
+        setContentView(R.layout.map_activity);
+        Bundle param=getIntent().getExtras();
+        user=(String) param.get("user");
+        locations=(String) param.get("locations");
+        getSupportActionBar().setTitle("Map Location Activity");
 
-
-
-        tabHost = (TabHost) findViewById(android.R.id.tabhost);
-        tabHost.setup();
-        LayoutInflater inflater = getLayoutInflater().from(this);
-        inflater.inflate(R.layout.tab1, tabHost.getTabContentView());
-        inflater.inflate(R.layout.tab2, tabHost.getTabContentView());
-        inflater.inflate(R.layout.tab3, tabHost.getTabContentView());
-        inflater.inflate(R.layout.tab4, tabHost.getTabContentView());
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
-
-        TabHost.TabSpec spec;  // Resusable TabSpec for each tab
-        Intent intent;  // Reusable Intent for each tab
-        String user= getIntent().getStringExtra("user");
-        // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, RegActivity.class);
-        //intent.putExtra("user",user);
-        spec = tabHost.newTabSpec("tab01").setIndicator("",this.getResources().getDrawable(R.drawable.home)).setContent(intent);
-        tabHost.addTab(spec);
-
-
-
-        tabHost.addTab(tabHost.newTabSpec("tab02")
-                .setIndicator("", this.getResources().getDrawable(R.drawable.search))
-                .setContent(R.id.linearLayout02));
-
-        tabHost.addTab(tabHost.newTabSpec("tab03")
-                .setIndicator("", this.getResources().getDrawable(R.drawable.information))
-                .setContent(R.id.linearLayout03));
-
-        tabHost.addTab(tabHost.newTabSpec("tab04")
-                .setIndicator("", this.getResources().getDrawable(R.drawable.setting))
-                .setContent(R.id.linearLayout04));
-
     }
+
+    @Override
     public void onPause() {
         super.onPause();
 
@@ -162,95 +103,73 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
         }
-        // Add some markers to the map, and add a data object to each marker.
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 45.1630,-123.268))
-                .title("This is my Orange")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+        ArrayList locale = new ArrayList();
+        // load markers from database
+        try {
 
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 44.5630,-112.268))
-                .title("This is my Blue")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            //funcions per a cridar el string amb JSON i convertir-lo de nou a JSON
+            JSONArray jsas = new JSONArray(locations);
+            Log.d("json",jsas.length()+"  ");
+            ArrayList loc = new ArrayList();
+            for (int i =0; i < jsas.length(); i++)
+            {
+                Integer j =0;
 
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 41.2630,-123.268))
-                .title("This is my Cyan")
-                .snippet("add snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                JSONObject message = jsas.getJSONObject(i);
+                Log.d("in for loop",message.toString());
+                if (message.getString("title").equals("userRefId")){
+                    userId = message.getString("value");
+                    loc.add(userId);
+                }
+                if (message.getString("title").equals("latitude")){
+                    latitude =  message.getString("value");
+                    loc.add(latitude);
+                }
+                if (message.getString("title").equals("longitude")){
+                    longitude = message.getString("value");
+                    loc.add(longitude);
+                }
+                if (message.getString("title").equals("userActive")){
+                    active = Integer.parseInt(message.getString("value"));
+                    loc.add(active);
+                }
+                if (message.getString("title").equals("userStatus")){
+                    status = message.getString("value");
+                    loc.add(status);
+                    j=1;
+                }
+                if (j ==1 && loc.size()!=0) {
+                    Log.d("loc",loc.toString());
+                    Log.d("lat",Double.parseDouble(loc.get(1).toString())+"  "+ Double.parseDouble(loc.get(2).toString()));
+                    Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(loc.get(1).toString()), Double.parseDouble(loc.get(2).toString()))).title(loc.get(0).toString())); //...
+                    loc.clear();
+                }
 
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 44.5630,-120.268))
-                .title("This is my Red")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+            }
 
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 44.5630,-113.268))
-                .title("This is my Rose")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
-
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 44.5630,-103.268))
-                .title("This is my Violet")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 44.130,-123.268))
-                .title("This is my Yellow")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 41.5630,-123.268))
-                .title("This is my Green")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 42.5630,-123.268))
-                .title("This is my Azure")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(new LatLng( 43.5630,-123.268))
-                .title("Magneta")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
 
-
-        mPerth = mGoogleMap.addMarker(new MarkerOptions()
-                .position(PERTH)
-                .title("This is my title")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mPerth.setTag(0);
-
-        mSydney = mGoogleMap.addMarker(new MarkerOptions()
-                .position(SYDNEY)
-                .title("This is my title")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        mSydney.setTag(0);
-
-        mBrisbane = mGoogleMap.addMarker(new MarkerOptions()
-                .position(BRISBANE)
-                .title("This is my title")
-                .snippet("and snippet")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        mBrisbane.setTag(0);
-
-        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        /*mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
             @Override
             public boolean onMarkerClick(Marker marker) {
-
+                // retrieve data based on marker title or snippet from database and send to profile view
+                String title = marker.getTitle();
                 Intent intent = new Intent();
-                startActivity(new Intent(getApplicationContext(),RegisterActivity.class));
+                startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class).putExtra("user",user).putExtra("title",title));
                 return  true;
+            }
+        });*/
+        mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String title = marker.getTitle();
+                Intent intent = new Intent();
+                startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class).putExtra("user",user).putExtra("title",title));
             }
         });
     }
@@ -291,12 +210,17 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             mCurrLocationMarker.remove();
         }
 
+        //HomeActivity1 homeActivity1 = new HomeActivity1();
+
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        Log.d("output",latLng.toString());
+        // save to database current location
+        //homeActivity1.updateUserLocation(String.valueOf(location.getLatitude()),String.valueOf((location.getLongitude())));
+
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("Current Position"+latLng.toString());
+        markerOptions.title("Current Position");
+        markerOptions.snippet(latLng+"");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
 
@@ -324,7 +248,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(HomeActivity.this,
+                                ActivityCompat.requestPermissions(MapLocationActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION );
                             }
@@ -376,4 +300,5 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             // permissions this app might request
         }
     }
+
 }

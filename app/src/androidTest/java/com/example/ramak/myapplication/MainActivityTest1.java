@@ -32,6 +32,10 @@ public class MainActivityTest1 {
     private String edit3 = "rkk";
     Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(RegisterActivity.class.getName(),null,false);
     Instrumentation.ActivityMonitor monitor1 = getInstrumentation().addMonitor(HomeActivity.class.getName(),null,false);
+    Instrumentation.ActivityMonitor monitor2 = getInstrumentation().addMonitor(MapLocationActivity.class.getName(),null,false);
+    Instrumentation.ActivityMonitor monitor3 = getInstrumentation().addMonitor(ProfileActivity.class.getName(),null,false);
+    Instrumentation.ActivityMonitor monitor4 = getInstrumentation().addMonitor(MainActivity.class.getName(),null,false);
+    Instrumentation.ActivityMonitor monitor5 = getInstrumentation().addMonitor(MapLocationActivity.class.getName(),null,false);
     @Before
     public void setUp() throws Exception {
         mActivity = mActivityTestRule.getActivity();
@@ -90,7 +94,75 @@ public class MainActivityTest1 {
         Espresso.onView(withId(R.id.editTextPassword)).perform(typeText(edit3));
         Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.submit_button)).perform(click());
-        //Activity home = getInstrumentation().waitForMonitorWithTimeout(monitor1,5000);
+        Activity home = getInstrumentation().waitForMonitorWithTimeout(monitor1,5000);
+        assertNotNull(mActivity);
+        mActivity.finish();
+
+    }
+    @Test
+    public void validUserLogintestLaunchOfMapLocationActivity(){
+        Espresso.onView(withId(R.id.editTextUserId)).perform(typeText(edit1));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.editTextPassword)).perform(typeText(edit2));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.submit_button)).perform(click());
+        Activity home = getInstrumentation().waitForMonitorWithTimeout(monitor2,5000);
+        assertNotNull(home);
+        home.finish();
+
+    }
+    @Test
+    public void validUserLogintestLaunchOfProfileActivity(){
+        Espresso.onView(withId(R.id.editTextUserId)).perform(typeText(edit1));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.editTextPassword)).perform(typeText(edit3));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.submit_button)).perform(click());
+        Activity home = getInstrumentation().waitForMonitorWithTimeout(monitor3,5000);
+        assertNotNull(mActivity);
+        mActivity.finish();
+
+    }
+    public void validUserLogintestLaunchOfLogoutActivity(){
+        Espresso.onView(withId(R.id.editTextUserId)).perform(typeText(edit1));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.editTextPassword)).perform(typeText(edit3));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.submit_button)).perform(click());
+        Activity home = getInstrumentation().waitForMonitorWithTimeout(monitor4,5000);
+        assertNotNull(mActivity);
+        mActivity.finish();
+
+    }
+    public void validUserLogintestLaunchOfInboxActivity(){
+        Espresso.onView(withId(R.id.editTextUserId)).perform(typeText(edit1));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.editTextPassword)).perform(typeText(edit3));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.submit_button)).perform(click());
+        Activity home = getInstrumentation().waitForMonitorWithTimeout(monitor5,5000);
+        assertNotNull(mActivity);
+        mActivity.finish();
+
+    }
+    public void validUserLogintestLaunchOfScanActivity(){
+        Espresso.onView(withId(R.id.editTextUserId)).perform(typeText(edit1));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.editTextPassword)).perform(typeText(edit3));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.submit_button)).perform(click());
+        Activity home = getInstrumentation().waitForMonitorWithTimeout(monitor2,5000);
+        assertNotNull(mActivity);
+        mActivity.finish();
+
+    }
+    public void validUserLogintestLaunchOfCurrentUserLocationActivity(){
+        Espresso.onView(withId(R.id.editTextUserId)).perform(typeText(edit1));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.editTextPassword)).perform(typeText(edit3));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.submit_button)).perform(click());
+        Activity home = getInstrumentation().waitForMonitorWithTimeout(monitor2,5000);
         assertNotNull(mActivity);
         mActivity.finish();
 
