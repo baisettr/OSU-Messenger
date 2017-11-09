@@ -106,15 +106,18 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
 
-        TabHost.TabSpec spec;  // Resusable TabSpec for each tab
+        /*TabHost.TabSpec spec;  // Resusable TabSpec for each tab
         Intent intent;  // Reusable Intent for each tab
         String user= getIntent().getStringExtra("user");
         // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent().setClass(this, RegActivity.class);
         //intent.putExtra("user",user);
         spec = tabHost.newTabSpec("tab01").setIndicator("",this.getResources().getDrawable(R.drawable.home)).setContent(intent);
-        tabHost.addTab(spec);
+        tabHost.addTab(spec);*/
 
+        tabHost.addTab(tabHost.newTabSpec("tab01")
+                .setIndicator("", this.getResources().getDrawable(R.drawable.home))
+                .setContent(R.id.linearLayout01));
 
 
         tabHost.addTab(tabHost.newTabSpec("tab02")

@@ -23,6 +23,8 @@ import static android.view.View.GONE;
 public class HomeActivity1 extends AppCompatActivity {
     private Button log_out;
     private Button scan;
+    private Button profile;
+    private Button message;
     private String json;
     private TextView userId;
 
@@ -53,6 +55,8 @@ public class HomeActivity1 extends AppCompatActivity {
 
         log_out = (Button)findViewById(R.id.logout);
         scan = (Button)findViewById(R.id.scan);
+        profile =(Button)findViewById(R.id.profile);
+        message =(Button)findViewById(R.id.inbox);
         userId = (TextView) findViewById(R.id.welcome);
         userId.setText("Welcome "+json);
         log_out.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +70,19 @@ public class HomeActivity1 extends AppCompatActivity {
                 //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class).putExtra("user",user));
             }
         });
+        profile.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //listLocations();
+                startActivity(new Intent(getApplicationContext(),ProfileActivity.class).putExtra("user",user));
+            }
+        });
+        message.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //listLocations();
+                startActivity(new Intent(getApplicationContext(),MessageActivity.class));
+            }
+        });
+
     }
     public void listLocations() {
 
@@ -76,7 +93,7 @@ public class HomeActivity1 extends AppCompatActivity {
         request.execute();
     }
 
-    public void updateUserLocation(String latitude,String longitude) {
+    /*public void updateUserLocation(String latitude,String longitude) {
 
 
         HashMap<String, String> params = new HashMap<>();
@@ -86,10 +103,11 @@ public class HomeActivity1 extends AppCompatActivity {
 
         params.put("userActive", "1");
         params.put("userStatus", "violet");
+        Log.d("updATE LOCATION",latitude);
         //Calling the create hero API
         HomeActivity1.PerformNetworkRequest request = new HomeActivity1.PerformNetworkRequest(Api.URL_INSERTUSERLOCATION_USER, params, CODE_POST_REQUEST);
         request.execute();
-    }
+    }*/
     //inner class to perform network request extending an AsyncTask
     private class PerformNetworkRequest extends AsyncTask<Void, Void, String> {
 
@@ -139,7 +157,7 @@ public class HomeActivity1 extends AppCompatActivity {
                 if (object.names().get(0).equals("success")){
                     Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
                     Log.d("output",object.getString("success"));
-                    startActivity(new Intent(getApplicationContext(),MapLocationActivity.class).putExtra("user",json).putExtra("locations",object.getString("success")));
+                    startActivity(new Intent(getApplicationContext(),MapLocationActivity.class).putExtra("update",1).putExtra("user",params.get("userId")).putExtra("locations",object.getString("success")));
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"ERROR"+object.getString("error"),Toast.LENGTH_SHORT).show();

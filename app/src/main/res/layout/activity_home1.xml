@@ -8,22 +8,29 @@
 
     <Button
         android:id="@+id/scan"
-        android:layout_width="384dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Scan" />
 
     <Button
         android:id="@+id/inbox"
-        android:layout_width="384dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Inbox" />
+    <TextView
+        android:id="@+id/text0"
+        android:layout_width="354dp"
+        android:layout_height="21dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.11"
+        android:textSize="24dp" />
 
     <TextView
         android:id="@+id/welcome"
-        android:layout_width="384dp"
-        android:layout_height="wrap_content"
+        android:layout_width="354dp"
+        android:layout_height="21dp"
         android:layout_gravity="center"
         android:layout_weight="0.11"
         android:text="Welcome"
@@ -31,12 +38,11 @@
 
     <TextView
         android:id="@+id/help"
-        android:layout_width="384dp"
+        android:layout_width="354dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Welcome"
-        android:textSize="24dp"
-        android:layout_weight="0.87" />
+        android:layout_weight="0.67"
+        android:textSize="24dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,7 +51,7 @@
 
         <Button
             android:id="@+id/profile"
-            android:layout_width="384dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Profile"
@@ -53,7 +59,7 @@
 
         <Button
             android:id="@+id/logout"
-            android:layout_width="384dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Logout"

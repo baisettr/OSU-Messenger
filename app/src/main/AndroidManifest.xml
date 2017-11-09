@@ -38,7 +38,12 @@
         <activity
             android:name=".ProfileViewActivity"
             android:label="viewActivity" />
-
+        <activity
+            android:name=".ProfileActivity"
+            android:label="profileActivity" />
+        <activity
+            android:name=".MessageActivity"
+            android:label="messageActivity" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD_OyIu6tYS1liu-ouQdUnhlYgRJ3xbiT8" />

@@ -1,8 +1,17 @@
 package com.example.ramak.myapplication;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 /**
  * Created by ramak on 10/31/2017.
  */
 
-public class MessageActivity {
+public class MessageActivity extends AppCompatActivity {
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_message);
+    }
 }

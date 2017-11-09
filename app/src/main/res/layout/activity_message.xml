@@ -6,21 +6,6 @@
     android:weightSum="1">
 
 
-    <Button
-        android:id="@+id/favourite"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Add to Favourite"
-        android:visibility="invisible" />
-
-    <Button
-        android:id="@+id/message"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Message"
-        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/text0"
@@ -93,18 +78,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/request"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="REQUEST"
-            android:textSize="18dp"
-            android:visibility="invisible" />
 
         <Button
-            android:id="@+id/accept"
-            android:layout_width="200dp"
+            android:id="@+id/update"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="ACCEPT"

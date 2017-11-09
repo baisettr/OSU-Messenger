@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MapLocationActivity extends AppCompatActivity
@@ -55,6 +57,9 @@ public class MapLocationActivity extends AppCompatActivity
     private String longitude;
     private String status;
     private Integer active;
+    private Integer update;
+    private static final int CODE_GET_REQUEST = 1024;
+    private static final int CODE_POST_REQUEST = 1025;
     //private BitmapDescriptorFactory colour;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,7 +68,9 @@ public class MapLocationActivity extends AppCompatActivity
         setContentView(R.layout.map_activity);
         Bundle param=getIntent().getExtras();
         user=(String) param.get("user");
+        Log.d("userID",user);
         locations=(String) param.get("locations");
+        update=(Integer) param.get("update");
         getSupportActionBar().setTitle("Map Location Activity");
 
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -84,7 +91,7 @@ public class MapLocationActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap)
     {
         mGoogleMap=googleMap;
-        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -103,6 +110,11 @@ public class MapLocationActivity extends AppCompatActivity
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
         }
+
+        MapLocationActivity mapLocationActivity = new MapLocationActivity();
+
+        // save to database current location
+        //mapLocationActivity.updateUserLocation(String.valueOf(42),String.valueOf(89));
         ArrayList locale = new ArrayList();
         // load markers from database
         try {
@@ -117,7 +129,7 @@ public class MapLocationActivity extends AppCompatActivity
 
                 JSONObject message = jsas.getJSONObject(i);
                 Log.d("in for loop",message.toString());
-                if (message.getString("title").equals("userRefId")){
+                if (message.getString("title").equals("userId")){
                     userId = message.getString("value");
                     loc.add(userId);
                 }
@@ -141,7 +153,31 @@ public class MapLocationActivity extends AppCompatActivity
                 if (j ==1 && loc.size()!=0) {
                     Log.d("loc",loc.toString());
                     Log.d("lat",Double.parseDouble(loc.get(1).toString())+"  "+ Double.parseDouble(loc.get(2).toString()));
-                    Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(loc.get(1).toString()), Double.parseDouble(loc.get(2).toString()))).title(loc.get(0).toString())); //...
+                    if (loc.get(4).toString().equals("green")){
+                        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(loc.get(1).toString()), Double.parseDouble(loc.get(2).toString()))).title(loc.get(0).toString()).snippet(loc.get(3).toString())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        marker.setTag("green");
+                    }
+                    else if (loc.get(4).toString().equals("blue")){
+                        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(loc.get(1).toString()), Double.parseDouble(loc.get(2).toString()))).title(loc.get(0).toString()).snippet(loc.get(3).toString())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        marker.setTag("blue");
+                    }
+                    else if (loc.get(4).toString().equals("yellow")){
+                        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(loc.get(1).toString()), Double.parseDouble(loc.get(2).toString()))).title(loc.get(0).toString()).snippet(loc.get(3).toString())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                        marker.setTag("yellow");
+                    }
+                    else if (loc.get(4).toString().equals("red")){
+                        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(loc.get(1).toString()), Double.parseDouble(loc.get(2).toString()))).title(loc.get(0).toString()).snippet(loc.get(3).toString())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        marker.setTag("red");
+                    }
+                    else {
+                        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(loc.get(1).toString()), Double.parseDouble(loc.get(2).toString()))).title(loc.get(0).toString()).snippet(loc.get(3).toString())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                        marker.setTag("orange");//...
+                    }
                     loc.clear();
                 }
 
@@ -168,10 +204,14 @@ public class MapLocationActivity extends AppCompatActivity
             @Override
             public void onInfoWindowClick(Marker marker) {
                 String title = marker.getTitle();
-                Intent intent = new Intent();
-                startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class).putExtra("user",user).putExtra("title",title));
+                String tag = marker.getTag().toString();
+                getUserDetails(title,user,tag);
+                //Intent intent = new Intent();
+                //startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class).putExtra("user",user).putExtra("title",title));
             }
         });
+        LatLng latLng = new LatLng(44.5648718, -123.2762719);
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -210,13 +250,15 @@ public class MapLocationActivity extends AppCompatActivity
             mCurrLocationMarker.remove();
         }
 
-        //HomeActivity1 homeActivity1 = new HomeActivity1();
+        MapLocationActivity mapLocationActivity = new MapLocationActivity();
 
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         // save to database current location
-        //homeActivity1.updateUserLocation(String.valueOf(location.getLatitude()),String.valueOf((location.getLongitude())));
-
+        if (update == 1 ) {
+            mapLocationActivity.updateUserLocation(user,String.valueOf(location.getLatitude()), String.valueOf((location.getLongitude())));
+            update =0;
+        }
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Position");
@@ -298,6 +340,121 @@ public class MapLocationActivity extends AppCompatActivity
 
             // other 'case' lines to check for other
             // permissions this app might request
+        }
+    }
+
+
+    public void updateUserLocation(String user,String latitude,String longitude) {
+
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("userId", user);
+        params.put("latitude", latitude);
+        params.put("longitude", longitude);
+
+        params.put("userActive", "1");
+        params.put("userStatus", "violet");
+        Log.d("updATE LOCATION",latitude);
+        //Calling the create hero API
+        MapLocationActivity.PerformNetworkRequest request = new MapLocationActivity.PerformNetworkRequest(Api.URL_UPDATEUSERLOCATION_USER, params, CODE_POST_REQUEST);
+        request.execute();
+    }
+
+    public void getUserDetails(String user1,String user,String tag) {
+
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("userId", user1);
+        params.put("user", user);
+        params.put("tag", tag);
+        //Calling the create hero API
+        MapLocationActivity.PerformNetworkRequest request = new MapLocationActivity.PerformNetworkRequest(Api.URL_GETUSERDETAILS_USER, params, CODE_POST_REQUEST);
+        request.execute();
+    }
+
+    //inner class to perform network request extending an AsyncTask
+    private class PerformNetworkRequest extends AsyncTask<Void, Void, String> {
+
+        //the url where we need to send the request
+        String url;
+
+        //the parameters
+        HashMap<String, String> params;
+
+        //the request code to define whether it is a GET or POST
+        int requestCode;
+
+        //constructor to initialize values
+        PerformNetworkRequest(String url, HashMap<String, String> params, int requestCode) {
+            this.url = url;
+            this.params = params;
+            this.requestCode = requestCode;
+        }
+
+        //when the task started displaying a progressbar
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //progressBar.setVisibility(View.VISIBLE);
+        }
+
+
+        //this method will give the response from the request
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            //progressBar.setVisibility(GONE);
+            try {
+                JSONObject object = new JSONObject(s);
+                Log.d("here1",object.toString());
+                /*if (!object.getBoolean("error")) {
+                    Toast.makeText(getApplicationContext(), object.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+                    //refreshing the herolist after every operation
+                    //so we get an updated list
+                    //we will create this method right now it is commented
+                    //because we haven't created it yet
+                    //refreshHeroList(object.getJSONArray("heroes"));
+                }*/
+
+                if (object.names().get(0).equals("success")){
+                    //Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
+                    Log.d("output",object.getString("success"));
+                    //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class));
+
+                    //startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class).putExtra("user1",object.getString("success")).putExtra("user",params.get("user")));
+                }
+                else{
+                    //sToast.makeText(getApplicationContext(),"ERROR"+object.getString("error"),Toast.LENGTH_SHORT).show();
+                }
+                if (object.names().get(0).equals("success1")){
+                    //Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
+                    Log.d("output1",object.getString("success1"));
+                    //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class));
+                    startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class).putExtra("user1",object.getString("success1")).putExtra("user",params.get("user")).putExtra("tag",params.get("tag")));
+                }
+                else{
+                    //sToast.makeText(getApplicationContext(),"ERROR"+object.getString("error"),Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //the network operation will be performed in background
+        @Override
+        protected String doInBackground(Void... voids) {
+            RequestHandler requestHandler = new RequestHandler();
+
+            if (requestCode == CODE_POST_REQUEST)
+                return requestHandler.sendPostRequest(url, params);
+
+
+            if (requestCode == CODE_GET_REQUEST)
+                return requestHandler.sendGetRequest(url);
+
+            return null;
         }
     }
 
