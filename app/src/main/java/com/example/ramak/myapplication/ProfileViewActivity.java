@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -216,7 +217,7 @@ public class ProfileViewActivity extends AppCompatActivity {
                 }*/
 
                 if (object.names().get(0).equals("success")){
-                    //Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
                     Log.d("output",object.getString("success"));
                     //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class));
 

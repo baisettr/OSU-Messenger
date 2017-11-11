@@ -18,5 +18,7 @@ public class Api {
     public static final String URL_REQUESTUSER_USER = ROOT_URL + "requestUser";
     public static final String URL_ACCEPTUSER_USER = ROOT_URL + "acceptUser";
     public static final String URL_UPDATEUSER_USER = ROOT_URL + "updateUser";
+    public static final String URL_GETMAILBOX_USER = ROOT_URL + "getMailBox";
+    public static final String URL_GETMESSAGES_USER = ROOT_URL + "getMessages";
 
 }

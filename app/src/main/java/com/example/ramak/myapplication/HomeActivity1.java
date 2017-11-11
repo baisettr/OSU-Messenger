@@ -79,7 +79,8 @@ public class HomeActivity1 extends AppCompatActivity {
         message.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //listLocations();
-                startActivity(new Intent(getApplicationContext(),MessageActivity.class));
+                getMailBox();
+                //startActivity(new Intent(getApplicationContext(),MessageActivity.class));
             }
         });
 
@@ -90,6 +91,14 @@ public class HomeActivity1 extends AppCompatActivity {
         params.put("userId", json);
         //Calling the create hero API
         HomeActivity1.PerformNetworkRequest request = new HomeActivity1.PerformNetworkRequest(Api.URL_LISTLOCATIONS_USER, params, CODE_POST_REQUEST);
+        request.execute();
+    }
+    public void getMailBox() {
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("recv_id", json);
+        //Calling the create hero API
+        HomeActivity1.PerformNetworkRequest request = new HomeActivity1.PerformNetworkRequest(Api.URL_GETMAILBOX_USER, params, CODE_POST_REQUEST);
         request.execute();
     }
 
@@ -158,6 +167,11 @@ public class HomeActivity1 extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
                     Log.d("output",object.getString("success"));
                     startActivity(new Intent(getApplicationContext(),MapLocationActivity.class).putExtra("update",1).putExtra("user",params.get("userId")).putExtra("locations",object.getString("success")));
+                }
+                else if (object.names().get(0).equals("success1")){
+                    Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
+                    Log.d("output here message",object.getString("success1"));
+                    startActivity(new Intent(getApplicationContext(),MessageActivity.class).putExtra("user",params.get("recv_id")).putExtra("messages",object.getString("success1")));
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"ERROR"+object.getString("error"),Toast.LENGTH_SHORT).show();
