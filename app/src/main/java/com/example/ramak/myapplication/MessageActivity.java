@@ -44,6 +44,7 @@ public class MessageActivity extends AppCompatActivity {
 
         Bundle param=getIntent().getExtras();
         final String mailBox=(String) param.get("messages");
+        recv_id = (String) param.get("user");
         try {
 
             //funcions per a cridar el string amb JSON i convertir-lo de nou a JSON
@@ -51,10 +52,10 @@ public class MessageActivity extends AppCompatActivity {
             for (int i =0; i < jsas.length(); i++)
             {
                 JSONObject message = jsas.getJSONObject(i);
-                if (message.getString("title").equals("recv_id")){
+                if (message.getString("title").equals("send_id")){
                     recv_id = message.getString("value");
                 }
-                if (message.getString("title").equals("send_id")){
+                /*if (message.getString("title").equals("send_id")){
                     send_id = message.getString("value");
                 }
                 if (message.getString("title").equals("date_sent")){
@@ -65,7 +66,7 @@ public class MessageActivity extends AppCompatActivity {
                 }
                 if (message.getString("title").equals("message_content")) {
                     message_content = message.getString("value");
-                }
+                }*/
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -78,7 +79,7 @@ public class MessageActivity extends AppCompatActivity {
         userTitle = (TextView) findViewById(R.id.text2);
         userTitle.setText("Name : "+send_id);
         userEmail = (TextView) findViewById(R.id.text3);
-        userEmail.setText("Email : "+date_sent);
+        userEmail.setText("Email : "+mailBox);
         userSkills = (TextView) findViewById(R.id.text4);
         userSkills.setText("Skills : "+recv_accep);
         userPhone = (TextView) findViewById(R.id.text5);
