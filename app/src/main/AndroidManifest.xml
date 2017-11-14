@@ -42,8 +42,14 @@
             android:name=".ProfileActivity"
             android:label="profileActivity" />
         <activity
+            android:name=".MessageActivity1"
+            android:label="messageActivity1" />
+        <activity
             android:name=".MessageActivity"
             android:label="messageActivity" />
+        <activity
+            android:name=".MessageViewActivity"
+            android:label="messageViewActivity" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD_OyIu6tYS1liu-ouQdUnhlYgRJ3xbiT8" />

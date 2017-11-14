@@ -1,6 +1,5 @@
 package com.example.ramak.myapplication;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,17 +14,14 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ProfileViewActivity extends AppCompatActivity {
-    private Button request;
-    private Button accept;
-    private Button favourite;
-    private Button message;
+public class MessageActivity1 extends AppCompatActivity {
+    private Button update;
     private String json;
-    private String user1Id;
-    private String user1FirstName;
-    private String user1LastName;
-    private String user1Email;
-    private String user1Major;
+    private String recv_accep;
+    private String send_id;
+    private String recv_id;
+    private String message_content;
+    private String date_sent;
     private String user1Phone;
     private String user1Skills;
     private String studyYear;
@@ -44,133 +39,72 @@ public class ProfileViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_view);
+        setContentView(R.layout.activity_message1);
 
         Bundle param=getIntent().getExtras();
-        final String user=(String) param.get("user1");
-        title = (String) param.get("user");
-        tag = (String) param.get("tag");
+        final String mailBox=(String) param.get("messages");
+        recv_id = (String) param.get("user");
         try {
 
             //funcions per a cridar el string amb JSON i convertir-lo de nou a JSON
-            JSONArray jsas = new JSONArray(user);
+            JSONArray jsas = new JSONArray(mailBox);
             for (int i =0; i < jsas.length(); i++)
             {
                 JSONObject message = jsas.getJSONObject(i);
-                if (message.getString("title").equals("userId")){
-                    user1Id = message.getString("value");
+                if (message.getString("title").equals("send_id")){
+                    recv_id = message.getString("value");
                 }
-                if (message.getString("title").equals("userFirstName")){
-                    user1FirstName = message.getString("value");
+                /*if (message.getString("title").equals("send_id")){
+                    send_id = message.getString("value");
                 }
-                if (message.getString("title").equals("userLastName")){
-                    user1LastName = message.getString("value");
+                if (message.getString("title").equals("date_sent")){
+                    date_sent = message.getString("value");
                 }
-                if (message.getString("title").equals("userEmail")){
-                    user1Email = message.getString("value");
+                if (message.getString("title").equals("recv_accep")){
+                    recv_accep = message.getString("value");
                 }
-                if (message.getString("title").equals("userSkills")){
-                    user1Skills = message.getString("value");
-                }
-                if (message.getString("title").equals("userMajor")){
-                    user1Major = message.getString("value");
-                }
-                if (message.getString("title").equals("userPhone")){
-                    user1Phone = message.getString("value");
-                }
-                if (message.getString("title").equals("studyYear")){
-                    studyYear = message.getString("value");
-                }
+                if (message.getString("title").equals("message_content")) {
+                    message_content = message.getString("value");
+                }*/
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        request = (Button)findViewById(R.id.request);
-        accept = (Button)findViewById(R.id.accept);
-        favourite = (Button)findViewById(R.id.favourite);
-        message = (Button)findViewById(R.id.message);
+        update = (Button)findViewById(R.id.update);
 
         userId = (TextView) findViewById(R.id.text1);
-        userId.setText("ProfileId : "+user1Id);
+        userId.setText("ProfileId : "+recv_id);
         userTitle = (TextView) findViewById(R.id.text2);
-        userTitle.setText("Name : "+user1FirstName+" "+user1LastName);
+        userTitle.setText("Name : "+send_id);
         userEmail = (TextView) findViewById(R.id.text3);
-        userEmail.setText("Email : "+user1Email);
+        userEmail.setText("Email : "+mailBox);
         userSkills = (TextView) findViewById(R.id.text4);
-        userSkills.setText("Skills : "+user1Skills);
+        userSkills.setText("Skills : "+recv_accep);
         userPhone = (TextView) findViewById(R.id.text5);
-        userPhone.setText("Phone : "+user1Phone);
-        userStudy = (TextView) findViewById(R.id.text6);
-        userStudy.setText("Major : "+user1Major+" ("+studyYear+")");
+        userPhone.setText("Phone : "+message_content);
 
 
-        if (tag.equals("green")){
-            request.setVisibility(View.VISIBLE);
-            //accept.setVisibility(View.VISIBLE);
-        }
-        else if (tag.equals("red")){
-            //request.setVisibility(View.VISIBLE);
-            //request.setText("Requested");
-            //accept.setVisibility(View.VISIBLE);
-        }
-        else if (tag.equals("yellow")){
-            //request.setVisibility(View.VISIBLE);
-            accept.setVisibility(View.VISIBLE);
-        }
-        else if (tag.equals("orange")){
-            //request.setVisibility(View.VISIBLE);
-            //accept.setVisibility(View.VISIBLE);
-            //favourite.setVisibility(View.VISIBLE);
-            message.setVisibility(View.VISIBLE);
-        }
         // add profile section
-        request.setOnClickListener(new View.OnClickListener() {
+        update.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                request.setVisibility(View.INVISIBLE);
-                requestUser(user1Id,title);
-                //request.setText("Requested");
+                updateUser(recv_id);
                 //database update
                 //startActivity(new Intent(getApplicationContext(),MainActivity.class));
             }
         });
-        accept.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                accept.setVisibility(View.INVISIBLE);
-                acceptUser(user1Id,title);
-                //accept.setText("Accepted");
-                //database update
-                //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class).putExtra("user",user));
-            }
-        });
-        message.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //listLocations();
-                //startActivity(new Intent(getApplicationContext(),MessageActivity1.class));
-            }
-        });
+
     }
-    public void requestUser(String user1,String user) {
+    public void updateUser(String user1) {
 
 
         HashMap<String, String> params = new HashMap<>();
         params.put("userId", user1);
-        params.put("user", user);
         //Calling the create hero API
-        ProfileViewActivity.PerformNetworkRequest request = new ProfileViewActivity.PerformNetworkRequest(Api.URL_REQUESTUSER_USER, params, CODE_POST_REQUEST);
+        MessageActivity1.PerformNetworkRequest request = new MessageActivity1.PerformNetworkRequest(Api.URL_UPDATEUSER_USER, params, CODE_POST_REQUEST);
         request.execute();
     }
 
-    public void acceptUser(String user1,String user) {
-
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("userId", user1);
-        params.put("user", user);
-        //Calling the create hero API
-        ProfileViewActivity.PerformNetworkRequest request = new ProfileViewActivity.PerformNetworkRequest(Api.URL_ACCEPTUSER_USER, params, CODE_POST_REQUEST);
-        request.execute();
-    }
 
     //inner class to perform network request extending an AsyncTask
     private class PerformNetworkRequest extends AsyncTask<Void, Void, String> {
@@ -219,7 +153,7 @@ public class ProfileViewActivity extends AppCompatActivity {
                 }*/
 
                 if (object.names().get(0).equals("success")){
-                    Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
                     Log.d("output",object.getString("success"));
                     //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class));
 

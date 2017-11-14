@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +22,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button update;
     private String json;
     private String user1Id;
+    private String user1Password;
     private String user1FirstName;
     private String user1LastName;
     private String user1Email;
@@ -27,11 +31,14 @@ public class ProfileActivity extends AppCompatActivity {
     private String user1Skills;
     private String studyYear;
     private TextView userId;
-    private TextView userTitle;
-    private TextView userSkills;
-    private TextView userEmail;
-    private TextView userStudy;
-    private TextView userPhone;
+    private EditText userPassword;
+    private EditText userFirstName;
+    private EditText userLastName;
+    private EditText userSkills;
+    private EditText userEmail;
+    private EditText userMajor;
+    private EditText userStudy;
+    private EditText userPhone;
     private String title;
     private String tag;
     private static final int CODE_GET_REQUEST = 1024;
@@ -53,6 +60,9 @@ public class ProfileActivity extends AppCompatActivity {
                 JSONObject message = jsas.getJSONObject(i);
                 if (message.getString("title").equals("userId")){
                     user1Id = message.getString("value");
+                }
+                if (message.getString("title").equals("userPassword")){
+                    user1Password = message.getString("value");
                 }
                 if (message.getString("title").equals("userFirstName")){
                     user1FirstName = message.getString("value");
@@ -82,18 +92,24 @@ public class ProfileActivity extends AppCompatActivity {
 
         update = (Button)findViewById(R.id.update);
 
-        userId = (TextView) findViewById(R.id.text1);
-        userId.setText("ProfileId : "+user1Id);
-        userTitle = (TextView) findViewById(R.id.text2);
-        userTitle.setText("Name : "+user1FirstName+" "+user1LastName);
-        userEmail = (TextView) findViewById(R.id.text3);
-        userEmail.setText("Email : "+user1Email);
-        userSkills = (TextView) findViewById(R.id.text4);
-        userSkills.setText("Skills : "+user1Skills);
-        userPhone = (TextView) findViewById(R.id.text5);
-        userPhone.setText("Phone : "+user1Phone);
-        userStudy = (TextView) findViewById(R.id.text6);
-        userStudy.setText("Major : "+user1Major+" ("+studyYear+")");
+        userId = (TextView) findViewById(R.id.text0);
+        userId.setText(user1Id);
+        userPassword = (EditText) findViewById(R.id.text1);
+        userPassword.setText(user1Password);
+        userFirstName = (EditText) findViewById(R.id.text2);
+        userFirstName.setText(user1FirstName);
+        userLastName = (EditText) findViewById(R.id.text3);
+        userLastName.setText(user1LastName);
+        userEmail = (EditText) findViewById(R.id.text4);
+        userEmail.setText(user1Email);
+        userSkills = (EditText) findViewById(R.id.text5);
+        userSkills.setText(user1Skills);
+        userPhone = (EditText) findViewById(R.id.text6);
+        userPhone.setText(user1Phone);
+        userStudy = (EditText) findViewById(R.id.text7);
+        userStudy.setText(studyYear);
+        userMajor = (EditText) findViewById(R.id.text8);
+        userMajor.setText(user1Major);
 
 
         // add profile section
@@ -107,10 +123,53 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
     public void updateUser(String user1) {
+        String userId = user1;
+        String password = userPassword.getText().toString().trim();
+        //String passwordVer = editTextPasswordVer.getText().toString().trim();
+        String email = userEmail.getText().toString().trim();
+        String firstName = userFirstName.getText().toString().trim();
+        String lastName = userLastName.getText().toString().trim();
+        String phone = userPhone.getText().toString().trim();
+        String major = userMajor.getText().toString().trim();
+        String year = userStudy.getText().toString().trim();
+        String skills = userSkills.getText().toString().trim();
 
+        if (TextUtils.isEmpty(password)) {
+            userPassword.setError("Please enter password");
+            userPassword.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(email)) {
+            userEmail.setError("Please enter email");
+            userEmail.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(firstName)) {
+            userFirstName.setError("Please enter first name");
+            userFirstName.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(lastName)) {
+            userLastName.setError("Please enter last name");
+            userLastName.requestFocus();
+            return;
+        }
+        //if validation passes
 
         HashMap<String, String> params = new HashMap<>();
-        params.put("userId", user1);
+        params.put("userId", userId);
+        params.put("userPassword", password);
+        params.put("userFirstName", firstName);
+        params.put("userLastName", lastName);
+        params.put("userEmail", email);
+        params.put("userSkills", skills);
+        params.put("userMajor", major);
+        params.put("userPhone", phone);
+        params.put("studyYear", year);
+
         //Calling the create hero API
         ProfileActivity.PerformNetworkRequest request = new ProfileActivity.PerformNetworkRequest(Api.URL_UPDATEUSER_USER, params, CODE_POST_REQUEST);
         request.execute();
@@ -164,7 +223,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }*/
 
                 if (object.names().get(0).equals("success")){
-                    //Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
                     Log.d("output",object.getString("success"));
                     //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class));
 

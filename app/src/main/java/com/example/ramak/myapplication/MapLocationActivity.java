@@ -189,18 +189,22 @@ public class MapLocationActivity extends AppCompatActivity
 
 
 
-        /*mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
             @Override
             public boolean onMarkerClick(Marker marker) {
-                // retrieve data based on marker title or snippet from database and send to profile view
+                /*// retrieve data based on marker title or snippet from database and send to profile view
                 String title = marker.getTitle();
                 Intent intent = new Intent();
                 startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class).putExtra("user",user).putExtra("title",title));
-                return  true;
+                return  true;*/
+                String title = marker.getTitle();
+                String tag = marker.getTag().toString();
+                getUserDetails(title,user,tag);
+                return true;
             }
-        });*/
-        mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+        });
+        /*mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 String title = marker.getTitle();
@@ -209,7 +213,7 @@ public class MapLocationActivity extends AppCompatActivity
                 //Intent intent = new Intent();
                 //startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class).putExtra("user",user).putExtra("title",title));
             }
-        });
+        });*/
         LatLng latLng = new LatLng(44.5648718, -123.2762719);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
     }

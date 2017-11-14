@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,8 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-
-import static android.view.View.GONE;
 
 public class HomeActivity1 extends AppCompatActivity {
     private Button log_out;
@@ -80,7 +76,7 @@ public class HomeActivity1 extends AppCompatActivity {
             public void onClick(View v) {
                 //listLocations();
                 getMailBox();
-                //startActivity(new Intent(getApplicationContext(),MessageActivity.class));
+                //startActivity(new Intent(getApplicationContext(),MessageActivity1.class));
             }
         });
 
@@ -171,7 +167,7 @@ public class HomeActivity1 extends AppCompatActivity {
                 else if (object.names().get(0).equals("success1")){
                     Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
                     Log.d("output here message",object.getString("success1"));
-                    startActivity(new Intent(getApplicationContext(),MessageActivity.class).putExtra("user",params.get("recv_id")).putExtra("messages",object.getString("success1")));
+                    startActivity(new Intent(getApplicationContext(),MessageActivity.class).putExtra("user",params.get("recv_id")).putExtra("usersList",object.getString("success1")));
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"ERROR"+object.getString("error"),Toast.LENGTH_SHORT).show();
