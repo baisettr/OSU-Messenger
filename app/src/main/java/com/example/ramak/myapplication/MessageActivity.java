@@ -116,7 +116,7 @@ public class MessageActivity extends AppCompatActivity {
 
                 MessageBoxItem item = (MessageBoxItem) parent.getItemAtPosition(position);
                 // retrieve messages
-                // getMessages(recv_id,item.getTitle());
+                getMessages(recv_id,item.getTitle());
                 String sendUser = item.getTitle();
                 String contents = item.getDesc();
                 Drawable iconDrawable = item.getIcon();
@@ -190,17 +190,17 @@ public class MessageActivity extends AppCompatActivity {
                 Log.d("here1",object.toString());
 
                 //   output when messagesList is retrieved - object.getString("success")
-                if (object.names().get(0).equals("success")){
+                if (object.names().get(0).equals("success1")){
                     Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
-                    Log.d("output",object.getString("success"));
+                    Log.d("output",object.getString("success1"));
 
-                    //startActivity(new Intent(getApplicationContext(),MessageViewActivity.class).putExtra("messages",object.getString("success")).putExtra("user",params.get("recv_id")).putExtra("send_id",params.get("send_id")));
+                    startActivity(new Intent(getApplicationContext(),MessageViewActivity.class).putExtra("messages",object.getString("success1")).putExtra("user",params.get("recv_id")).putExtra("send_id",params.get("send_id")));
                 }
 
                 //   output when a new message is inserted - object.getString("success1")
-                else if (object.names().get(0).equals("success1")){
+                else if (object.names().get(0).equals("success")){
                     Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
-                    Log.d("output",object.getString("success1"));
+                    Log.d("output",object.getString("success"));
 }
                 else{
                     Toast.makeText(getApplicationContext(),"ERROR"+object.getString("error"),Toast.LENGTH_SHORT).show();
