@@ -43,6 +43,8 @@ public class MainActivityTest1 {
     Instrumentation.ActivityMonitor monitor3 = getInstrumentation().addMonitor(ProfileActivity.class.getName(),null,false);
     Instrumentation.ActivityMonitor monitor4 = getInstrumentation().addMonitor(MessageActivity1.class.getName(),null,false);
     Instrumentation.ActivityMonitor monitor5 = getInstrumentation().addMonitor(ProfileViewActivity.class.getName(),null,false);
+    Instrumentation.ActivityMonitor monitor6 = getInstrumentation().addMonitor(MessageActivity.class.getName(),null,false);
+    Instrumentation.ActivityMonitor monitor7 = getInstrumentation().addMonitor(MessageViewActivity.class.getName(),null,false);
     @Before
     public void setUp() throws Exception {
         mActivity = mActivityTestRule.getActivity();
@@ -246,6 +248,23 @@ public class MainActivityTest1 {
         Activity home3 = getInstrumentation().waitForMonitorWithTimeout(monitor4,5000);
         Espresso.onView(withId(R.id.message)).perform(click());
         assertNotNull(home3);
+        home3.finish();
+
+    }
+    @Test
+    public void validUserLogintestLaunchOfHomeActivityAndMessageAndMessageView(){
+        Espresso.onView(withId(R.id.editTextUserId)).perform(typeText(edit1));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.editTextPassword)).perform(typeText(edit2));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.submit_button)).perform(click());
+        Activity home3 = getInstrumentation().waitForMonitorWithTimeout(monitor1,5000);
+        Espresso.onView(withId(R.id.message)).perform(click());
+        assertNotNull(home3);
+        Activity home2 = getInstrumentation().waitForMonitorWithTimeout(monitor7,5000);
+        Espresso.onView(withId(R.id.listview1)).perform(click());
+        assertNotNull(home2);
+        home2.finish();
         home3.finish();
 
     }
