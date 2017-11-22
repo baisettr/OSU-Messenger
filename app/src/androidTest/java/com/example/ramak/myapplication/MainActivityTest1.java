@@ -155,6 +155,26 @@ public class MainActivityTest1 {
 
     }
     @Test
+    public void validUserLogintestLaunchOfHomeActivityAndMapLocationsAndList(){
+        Espresso.onView(withId(R.id.editTextUserId)).perform(typeText(edit1));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.editTextPassword)).perform(typeText(edit2));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.submit_button)).perform(click());
+        Activity home1 = getInstrumentation().waitForMonitorWithTimeout(monitor1,5000);
+        assertNotNull(home1);
+        Espresso.onView(withId(R.id.scan)).perform(click());
+        Activity home2 = getInstrumentation().waitForMonitorWithTimeout(monitor2,5000);
+        assertNotNull(home2);
+        //Espresso.onView(withId(R.id.list)).perform(click());
+        //Activity home3 = getInstrumentation().waitForMonitorWithTimeout(monitor8,5000);
+        //assertNotNull(home3);
+        home1.finish();
+        home2.finish();
+        //home3.finish();
+
+    }
+    @Test
     public void validUserLogintestLaunchOfHomeActivityAndMapLocationsAndUserAndRequest(){
         Espresso.onView(withId(R.id.editTextUserId)).perform(typeText(edit1));
         Espresso.closeSoftKeyboard();
@@ -261,6 +281,8 @@ public class MainActivityTest1 {
         Activity home3 = getInstrumentation().waitForMonitorWithTimeout(monitor1,5000);
         Espresso.onView(withId(R.id.message)).perform(click());
         assertNotNull(home3);
+        Activity home4 = getInstrumentation().waitForMonitorWithTimeout(monitor6,5000);
+        assertNotNull(home4);
         Activity home2 = getInstrumentation().waitForMonitorWithTimeout(monitor7,5000);
         Espresso.onView(withId(R.id.listview1)).perform(click());
         assertNotNull(home2);
