@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ProfileViewActivity extends AppCompatActivity {
+public class FilterActivity extends AppCompatActivity {
     private Button request;
     private Button accept;
     private Button favourite;
@@ -157,7 +157,7 @@ public class ProfileViewActivity extends AppCompatActivity {
         params.put("userId", user1);
         params.put("user", user);
         //Calling the create hero API
-        ProfileViewActivity.PerformNetworkRequest request = new ProfileViewActivity.PerformNetworkRequest(Api.URL_REQUESTUSER_USER, params, CODE_POST_REQUEST);
+        FilterActivity.PerformNetworkRequest request = new FilterActivity.PerformNetworkRequest(Api.URL_REQUESTUSER_USER, params, CODE_POST_REQUEST);
         request.execute();
     }
 
@@ -168,7 +168,7 @@ public class ProfileViewActivity extends AppCompatActivity {
         params.put("userId", user1);
         params.put("user", user);
         //Calling the create hero API
-        ProfileViewActivity.PerformNetworkRequest request = new ProfileViewActivity.PerformNetworkRequest(Api.URL_ACCEPTUSER_USER, params, CODE_POST_REQUEST);
+        FilterActivity.PerformNetworkRequest request = new FilterActivity.PerformNetworkRequest(Api.URL_ACCEPTUSER_USER, params, CODE_POST_REQUEST);
         request.execute();
     }
 

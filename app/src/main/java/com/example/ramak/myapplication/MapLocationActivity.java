@@ -13,6 +13,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,7 +47,7 @@ public class MapLocationActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,AdapterView.OnItemSelectedListener {
 
     GoogleMap mGoogleMap;
     SupportMapFragment mapFrag;
@@ -58,6 +63,11 @@ public class MapLocationActivity extends AppCompatActivity
     private String status;
     private Integer active;
     private Integer update;
+    private Integer refresh_1 = 0;
+    private Button refresh;
+    private Button filter;
+    private Spinner spinner;
+    private String selectedMajor;
     private static final int CODE_GET_REQUEST = 1024;
     private static final int CODE_POST_REQUEST = 1025;
     //private BitmapDescriptorFactory colour;
@@ -71,7 +81,37 @@ public class MapLocationActivity extends AppCompatActivity
         Log.d("userID",user);
         locations=(String) param.get("locations");
         update=(Integer) param.get("update");
+        refresh =(Button)findViewById(R.id.refresh);
+        //filter =(Button)findViewById(R.id.filter);
+        spinner = (Spinner) findViewById(R.id.spinner2);
+        spinner.setOnItemSelectedListener(this);
+        List<String> list = new ArrayList<String>();
+        list.add("ALL");
+        list.add("CS");
+        list.add("ECE");
+        list.add("ME");
+        list.add("ROB");
+        list.add("CE");
+        list.add("BA");
+        list.add("IE");
+        list.add("ST");
+        list.add("NSE");
+        list.add("MATS");
+        list.add("PH");
+        list.add("FIN");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
         getSupportActionBar().setTitle("Map Location Activity");
+        refresh.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                refresh_1 = 1;
+                refreshLocations();
+                //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class).putExtra("user",user));
+            }
+        });
 
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
@@ -376,6 +416,29 @@ public class MapLocationActivity extends AppCompatActivity
         request.execute();
     }
 
+    private void refreshLocations() {
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("userId", user);
+        params.put("refresh_1", refresh_1.toString());
+        //Calling the create hero API
+        MapLocationActivity.PerformNetworkRequest request = new MapLocationActivity.PerformNetworkRequest(Api.URL_LISTLOCATIONS_USER, params, CODE_POST_REQUEST);
+        request.execute();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        selectedMajor = parent.getItemAtPosition(position).toString();
+        if (selectedMajor.equals("ALL")){
+
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     //inner class to perform network request extending an AsyncTask
     private class PerformNetworkRequest extends AsyncTask<Void, Void, String> {
 
@@ -387,6 +450,7 @@ public class MapLocationActivity extends AppCompatActivity
 
         //the request code to define whether it is a GET or POST
         int requestCode;
+        GoogleMap rGoogleMap;
 
         //constructor to initialize values
         PerformNetworkRequest(String url, HashMap<String, String> params, int requestCode) {
@@ -421,7 +485,16 @@ public class MapLocationActivity extends AppCompatActivity
                     //because we haven't created it yet
                     //refreshHeroList(object.getJSONArray("heroes"));
                 }*/
+                if (object.names().get(0).equals("success") && Integer.parseInt(params.get("refresh_1"))==1){
+                    //Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
+                    locations = object.getString("success");
+                    mGoogleMap.clear();
+                    onMapReady(mGoogleMap);
+                    Log.d("output",object.getString("success"));
+                    //startActivity(new Intent(getApplicationContext(),MapLocationActivity.class));
 
+                    //startActivity(new Intent(getApplicationContext(),ProfileViewActivity.class).putExtra("user1",object.getString("success")).putExtra("user",params.get("user")));
+                }
                 if (object.names().get(0).equals("success")){
                     //Toast.makeText(getApplicationContext(),"SUCCESS", Toast.LENGTH_SHORT).show();
                     Log.d("output",object.getString("success"));

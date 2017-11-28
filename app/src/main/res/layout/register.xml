@@ -125,6 +125,7 @@
                 android:layout_gravity="center"
                 android:text="Major"
                 android:textSize="24dp"/>
+            <!--
 
             <EditText
                 android:id="@+id/editTextMajor"
@@ -132,6 +133,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/shape"/>
+            -->
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

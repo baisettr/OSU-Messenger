@@ -6,15 +6,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static android.view.View.GONE;
 
@@ -22,7 +27,7 @@ import static android.view.View.GONE;
  * Created by zy on 2017/10/14.
  */
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
     private Button cancel_button;//cancel button
     private Button submit_button;//submit button
@@ -34,7 +39,9 @@ public class RegisterActivity extends Activity {
     private EditText editTextLastName;
     private EditText editTextSkills;
     private EditText editTextPhone;
-    private EditText editTextMajor;
+    //private EditText editTextMajor;
+    private Spinner spinner;
+    private String selectedMajor;
     private EditText editTextYear;
     private ProgressBar progressBar;
     private static final int CODE_GET_REQUEST = 1024;
@@ -52,11 +59,30 @@ public class RegisterActivity extends Activity {
         editTextLastName = (EditText)findViewById(R.id.editTextLastName);
         editTextSkills = (EditText)findViewById(R.id.editTextSkills);
         editTextPhone =(EditText)findViewById(R.id.editTextPhone);
-        editTextMajor = (EditText)findViewById(R.id.editTextMajor);
+        //editTextMajor = (EditText)findViewById(R.id.editTextMajor);
         editTextYear = (EditText)findViewById(R.id.editTextYear);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         submit_button = (Button) findViewById(R.id.submit_button);
         cancel_button = (Button) findViewById(R.id.cancel_button);
+        spinner = (Spinner) findViewById(R.id.spinner1);
+        spinner.setOnItemSelectedListener(this);
+        List<String> list = new ArrayList<String>();
+        list.add("CS");
+        list.add("ECE");
+        list.add("ME");
+        list.add("ROB");
+        list.add("CE");
+        list.add("BA");
+        list.add("IE");
+        list.add("ST");
+        list.add("NSE");
+        list.add("MATS");
+        list.add("PH");
+        list.add("FIN");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         cancel_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -74,6 +100,20 @@ public class RegisterActivity extends Activity {
         });
 
     }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position,
+                               long id) {
+        selectedMajor = parent.getItemAtPosition(position).toString();
+        Toast.makeText(this, "YOUR SELECTION IS : " + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     private void regUser() {
         String userId = editTextUserId.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -82,7 +122,8 @@ public class RegisterActivity extends Activity {
         String firstName = editTextFirstName.getText().toString().trim();
         String lastName = editTextLastName.getText().toString().trim();
         String phone = editTextPhone.getText().toString().trim();
-        String major = editTextMajor.getText().toString().trim();
+        //String major = editTextMajor.getText().toString().trim();
+        String major = selectedMajor.trim();
         String year = editTextYear.getText().toString().trim();
         String skills = editTextSkills.getText().toString().trim();
 

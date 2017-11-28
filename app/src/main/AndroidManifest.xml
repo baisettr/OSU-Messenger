@@ -30,13 +30,17 @@
             android:name=".HomeActivity"
             android:label="homeActivity" />
         <activity
+            android:name=".HomeActivity1"
+            android:label="homeActivity1" />
+        <activity
             android:name=".RegisterActivity"
             android:label="registerActivity" />
         <activity
             android:name=".MapLocationActivity"
-            android:label="mapActivity" />
+            android:label="mapActivity"/>
         <activity
             android:name=".ProfileViewActivity"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert"
             android:label="viewActivity" />
         <activity
             android:name=".ProfileActivity"
@@ -57,7 +61,6 @@
         <activity
             android:name=".ButtonActivity"
             android:label="@string/title_activity_button" />
-        <activity android:name=".HomeActivity1"></activity>
     </application>
 
 </manifest>

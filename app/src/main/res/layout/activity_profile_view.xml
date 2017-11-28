@@ -9,7 +9,7 @@
     <Button
         android:id="@+id/favourite"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_gravity="center"
         android:text="Add to Favourite"
         android:visibility="invisible" />
@@ -24,15 +24,15 @@
 
     <TextView
         android:id="@+id/text0"
-        android:layout_width="354dp"
-        android:layout_height="21dp"
+        android:layout_width="300dp"
+        android:layout_height="1dp"
         android:layout_gravity="center"
-        android:layout_weight="0.11"
+        android:layout_weight="0.05"
         android:textSize="24dp" />
     <TextView
         android:id="@+id/text1"
-        android:layout_width="354dp"
-        android:layout_height="21dp"
+        android:layout_width="300dp"
+        android:layout_height="15dp"
         android:layout_gravity="center"
         android:layout_weight="0.11"
         android:text="Welcome"
@@ -40,8 +40,8 @@
 
     <TextView
         android:id="@+id/text2"
-        android:layout_width="354dp"
-        android:layout_height="21dp"
+        android:layout_width="300dp"
+        android:layout_height="15dp"
         android:layout_gravity="center"
         android:layout_weight="0.11"
         android:text="Welcome"
@@ -49,8 +49,8 @@
 
     <TextView
         android:id="@+id/text3"
-        android:layout_width="354dp"
-        android:layout_height="21dp"
+        android:layout_width="300dp"
+        android:layout_height="15dp"
         android:layout_gravity="center"
         android:layout_weight="0.11"
         android:text="Welcome"
@@ -58,32 +58,35 @@
 
     <TextView
         android:id="@+id/text4"
-        android:layout_width="354dp"
-        android:layout_height="21dp"
+        android:layout_width="300dp"
+        android:layout_height="15dp"
         android:layout_gravity="center"
         android:layout_weight="0.11"
         android:text="Welcome"
         android:textSize="24dp" />
+
     <TextView
         android:id="@+id/text5"
-        android:layout_width="354dp"
-        android:layout_height="21dp"
+        android:layout_width="300dp"
+        android:layout_height="15dp"
         android:layout_gravity="center"
         android:layout_weight="0.11"
         android:text="Welcome"
         android:textSize="24dp" />
+
     <TextView
         android:id="@+id/text6"
-        android:layout_width="354dp"
-        android:layout_height="21dp"
+        android:layout_width="300dp"
+        android:layout_height="15dp"
         android:layout_gravity="center"
         android:layout_weight="0.11"
         android:text="Welcome"
         android:textSize="24dp" />
+
     <TextView
         android:id="@+id/text7"
-        android:layout_width="354dp"
-        android:layout_height="21dp"
+        android:layout_width="300dp"
+        android:layout_height="15dp"
         android:layout_gravity="center"
         android:layout_weight="0.11"
         android:textSize="24dp" />
@@ -119,4 +122,5 @@
             android:visibility="gone" />
 
     </LinearLayout>
+
 </LinearLayout>
